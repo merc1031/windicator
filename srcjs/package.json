@@ -1,0 +1,33 @@
+{
+  "name": "windicator",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "node --harmony-tailcalls ./bin/www",
+    "restart": "npm run build; npm start",
+    "test": "npm run test-unit && npm run test-integration",
+    "test-unit": "./node_modules/mocha/bin/mocha test/unit/*.test.js",
+    "test-integration": "./node_modules/mocha/bin/mocha test/integration/*.test.js",
+    "postinstall": "npm build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merc1031/windicator.git"
+  },
+  "keywords": [
+    "darts"
+  ],
+  "author": "Leonidas Loucas",
+  "license": "None",
+  "homepage": "https://github.com/merc1031/windicator#readme",
+  "engines": {
+    "node": ">=6.2.1",
+    "npm": ">=3.8.9"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+  }
+}
