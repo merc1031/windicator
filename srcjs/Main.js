@@ -283,40 +283,4 @@ module.exports = class Windicator {
   generate() {
     return _.sortBy(_.uniq(_.flatten(Array.from(Array(21).keys(), (x) => [x,x*2,x*3]).concat([25,50]))));
   }
-
-  /**
-   * If there is value set this will return an object that is compatible with
-   * the state.widgetDartboard property and WidgetDartboard component.
-   *
-   * @returns {{}}
-   */
-  toWidgetDartboard() {
-    var dartboard = {
-      visible: false,
-      hide: {},
-      blink: {},
-      highlight: {}
-    };
-
-    if (this.values.length) {
-      dartboard.visible = true;
-      let val = this.values[0];
-
-      for (let i = 0, c = val.length; i < c; i += 1) {
-        let currentThrow = val[i];
-        if (!dartboard.highlight[currentThrow.number]) {
-          dartboard.highlight[currentThrow.number] = [];
-        }
-        dartboard.highlight[currentThrow.number].push(currentThrow);
-
-        // special case for singles
-        if (currentThrow.type === ThrowTypes.SINGLE_OUTER) {
-          dartboard.highlight[currentThrow.number].push({number: currentThrow.number, type: ThrowTypes.SINGLE_INNER});
-        } else if (currentThrow.type === ThrowTypes.SINGLE_INNER) {
-          dartboard.highlight[currentThrow.number].push({number: currentThrow.number, type: ThrowTypes.SINGLE_OUTER});
-        }
-      }
-    }
-    return dartboard;
-  }
 };
