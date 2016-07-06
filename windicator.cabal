@@ -20,6 +20,8 @@ library
                      , Windicator.Algorithm
   build-depends:       base >= 4.7 && < 5
                      , aeson
+                     , aeson-pretty
+                     , bytestring
   default-language:    Haskell2010
 
 executable windicator-exe

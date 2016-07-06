@@ -1,5 +1,8 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Windicator.Types where
+
+import Data.Aeson
 
 data SimpleDartType =
       Miss
@@ -51,4 +54,16 @@ data State = State {
     sHighestValue :: Integer
     }
 
+dartToValue :: SimpleDartType -> Integer
+dartToValue n
+    | n == Bull = 25
+    | otherwise = fromIntegral $ fromEnum n
 
+
+instance ToJSON WeightedDart where
+    toJSON (WDart (Dart (Simple n c)) w) = object $ [
+          "type" .= show c
+        , "value" .= dartToValue n
+        , "number" .= fromEnum n
+        , "weight" .= w
+        ]
