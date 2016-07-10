@@ -28,6 +28,7 @@ data WindicatorRequest = WindicatorRequest
     , wrThrowsRemaining :: Integer
     , wrHighest :: Integer
     , wrHistory :: [Dart]
+    , wrLimit :: Maybe Integer
     }
 
 instance FromJSON WindicatorRequest where
@@ -36,6 +37,7 @@ instance FromJSON WindicatorRequest where
                           <*> v .: "throws"
                           <*> v .: "highest"
                           <*> (fmap (map historyDartToDart) (v .: "history"))
+                          <*> v .:? "limit"
 
 data HistoryDart = HistoryDart
     { hdType :: DartNum'
@@ -80,7 +82,9 @@ printJSON :: ToJSON a => a -> IO ()
 printJSON = BSLC.putStrLn . encodePretty
 
 windicator :: WindicatorRequest -> Handler WindicatorResult
-windicator (WindicatorRequest {..}) = return $ calculate (State wrHighest) wrGoal wrThrowsRemaining wrHistory
+windicator (WindicatorRequest {..}) = return $ take' wrLimit $ calculate (State wrHighest) wrGoal wrThrowsRemaining wrHistory
+    where take' (Just limit) = take $ fromIntegral limit
+          take' Nothing = id
 
 main :: IO ()
 main = run 8888 app
