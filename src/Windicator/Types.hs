@@ -32,6 +32,12 @@ data SimpleDartType =
 data DartNum = Single | Double | Triple
     deriving (Show, Eq, Ord)
 
+instance ToJSON DartNum where
+    toJSON dn = String $ go dn
+        where go Triple = "TRIPLE"
+              go Double = "DOUBLE"
+              go Single = "SINGLE_OUTER"
+
 data DartType =
     Simple SimpleDartType DartNum
     deriving (Show, Eq, Ord)
@@ -62,7 +68,7 @@ dartToValue n
 
 instance ToJSON WeightedDart where
     toJSON (WDart (Dart (Simple n c)) w) = object $ [
-          "type" .= show c
+          "type" .= c
         , "value" .= dartToValue n
         , "number" .= fromEnum n
         , "weight" .= w
