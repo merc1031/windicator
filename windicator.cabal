@@ -18,6 +18,7 @@ library
   exposed-modules:     Windicator
                      , Windicator.Types
                      , Windicator.Algorithm
+  ghc-options:         -O2
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , aeson-pretty
@@ -27,7 +28,7 @@ library
 executable windicator-exe
   hs-source-dirs:      app
   main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , windicator
                      , aeson-pretty
@@ -37,7 +38,7 @@ executable windicator-exe
 executable windicator-service-exe
   hs-source-dirs:      server
   main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , windicator
                      , aeson-pretty
