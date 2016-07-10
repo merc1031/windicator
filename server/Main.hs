@@ -16,8 +16,12 @@ import Data.Aeson.Types (typeMismatch, Parser)
 import Data.Scientific (toBoundedInteger)
 import qualified Data.ByteString.Lazy.Char8 as BSLC
 import Data.Aeson.Encode.Pretty (encodePretty)
+import Data.Text (Text)
+
+type Head = Verb HEAD 200
 
 type WindicatorAPI = "windicator" :> ReqBody '[JSON] WindicatorRequest :> Post '[JSON] WindicatorResult
+    :<|> "up" :> Head '[JSON] NoContent
 
 type WindicatorResult = [[WeightedDart]]
 
@@ -70,7 +74,7 @@ historyDartToDart (HistoryDart {..}) = Dart (Simple hdNumber $ simplify hdType)
     where simplify (DartNum' s) = s
 
 server :: Server WindicatorAPI
-server = windicator
+server = windicator :<|> up
 
 windicatorAPI :: Proxy WindicatorAPI
 windicatorAPI = Proxy
@@ -85,6 +89,9 @@ windicator :: WindicatorRequest -> Handler WindicatorResult
 windicator (WindicatorRequest {..}) = return $ take' wrLimit $ calculate (State wrHighest) wrGoal wrThrowsRemaining wrHistory
     where take' (Just limit) = take $ fromIntegral limit
           take' Nothing = id
+
+up :: Handler NoContent
+up = return NoContent
 
 main :: IO ()
 main = run 8888 app
