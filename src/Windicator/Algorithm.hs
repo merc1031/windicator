@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Windicator.Algorithm where
 
 import Debug.Trace
@@ -81,8 +82,8 @@ expandDarts choices =
     in concat $ map genDartsForValues choices
 
 findCombinationsForTarget :: (Num a, Ord a) => a -> [[a]] -> [[a]] -> [[a]]
-findCombinationsForTarget _ [] acc = acc
-findCombinationsForTarget n (x:xs) acc =
+findCombinationsForTarget !_ [] acc = acc
+findCombinationsForTarget !n (x:xs) acc =
     let matches = [x | (== n) $ sum x]
     in findCombinationsForTarget n xs $ concat [matches, acc]
 
@@ -93,9 +94,13 @@ combsWithRep' n xs =
     in map (reverse . sort) combinations
 
 combsWithRep :: Integral b => b -> [a] -> [[a]]
-combsWithRep 0  _ = [[]]
-combsWithRep _ [] = []
-combsWithRep n xs@(y:ys) = map (y:) (combsWithRep (n-1) xs) <> combsWithRep n ys
+combsWithRep !0  _ = [[]]
+combsWithRep !_ [] = []
+combsWithRep !n xs@(y:ys) =
+    let all = map (y:) (combsWithRep (n-1) xs) <>  rest
+        rest = combsWithRep n ys
+    in all
+
 
 calculate :: State -> Integer -> Integer -> [Dart] -> [[WeightedDart]]
 calculate (State highest) goal throws _

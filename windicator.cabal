@@ -23,6 +23,7 @@ library
                      , aeson
                      , aeson-pretty
                      , bytestring
+                     , combinat
   default-language:    Haskell2010
 
 executable windicator-exe
